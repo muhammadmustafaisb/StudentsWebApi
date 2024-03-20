@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using Students.Repositories.Dto;
 using Students.Repositories.Models;
 
