@@ -21,30 +21,30 @@ namespace Students.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<StudentReadDto>> GetAllStudents()
+        public async Task<ActionResult<IEnumerable<StudentReadDto>>> GetAllStudents()
         {
-            var studentItems = _studentRepo.GetAllStudents();
+            var studentItems = _studentRepo.GetAllStudentsAsync();
 
-            return Ok(_mapper.Map<IEnumerable<StudentReadDto>>(studentItems));
+            return Ok(_mapper.Map<IEnumerable<StudentReadDto>>(await studentItems));
         }
 
         [HttpGet("{id}")]
-        public ActionResult<StudentReadDto> GetStudentById(int id)
+        public async Task<ActionResult<StudentReadDto>> GetStudentById(int id)
         {
-            var studentItem = _studentRepo.GetStudentById(id);
+            var studentItem = _studentRepo.GetStudentByIdAsync(id);
             if (studentItem == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<StudentReadDto>(studentItem));
+            return Ok(_mapper.Map<StudentReadDto>(await studentItem));
         }
 
         [HttpPost]
-        public ActionResult<StudentReadDto> CreateStudent(StudentCreateDto studentCreateDto)
+        public async Task<ActionResult<StudentReadDto>> CreateStudent(StudentCreateDto studentCreateDto)
         {
             var studentModel = _mapper.Map<Student>(studentCreateDto);
-            _studentRepo.CreateStudentAsync(studentModel);
-            _studentRepo.SaveChanges();
+            await _studentRepo.CreateStudentAsync(studentModel);
+            await _studentRepo.SaveChangesAsync();
 
             var studentReadDto = _mapper.Map<StudentReadDto>(studentModel);
 
@@ -52,9 +52,9 @@ namespace Students.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateStudent(int id, StudentUpdateDto studentUpdateDto)
+        public async Task<ActionResult> UpdateStudent(int id, StudentUpdateDto studentUpdateDto)
         {
-            var studentModelFromRepo = _studentRepo.GetStudentById(id);
+            var studentModelFromRepo =await _studentRepo.GetStudentByIdAsync(id);
             if (studentModelFromRepo == null)
             {
                 return NotFound();
@@ -64,15 +64,15 @@ namespace Students.Controllers
 
             _studentRepo.UpdateStudent(studentModelFromRepo);
 
-            _studentRepo.SaveChanges();
+           await _studentRepo.SaveChangesAsync();
 
             return Ok();
         }
 
         [HttpPatch("{id}")]
-        public ActionResult PartialStudentUpdate(int id, JsonPatchDocument<StudentUpdateDto> patchDoc)
+        public async Task<ActionResult> PartialStudentUpdate(int id, JsonPatchDocument<StudentUpdateDto> patchDoc)
         {
-            var studentModelFromRepo = _studentRepo.GetStudentById(id);
+            var studentModelFromRepo =await _studentRepo.GetStudentByIdAsync(id);
 
             if (studentModelFromRepo == null)
             {
@@ -91,24 +91,24 @@ namespace Students.Controllers
 
             _studentRepo.UpdateStudent(studentModelFromRepo);
 
-            _studentRepo.SaveChanges();
+            await _studentRepo.SaveChangesAsync();
 
             return Ok();
 
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteStudentById(int id) 
+        public async Task<ActionResult> DeleteStudentById(int id) 
         {
-            var studentModelFromRepo = _studentRepo.GetStudentById(id);
+            var studentModelFromRepo = _studentRepo.GetStudentByIdAsync(id);
 
             if (studentModelFromRepo == null)
             {
                 return NotFound();
             }
 
-            _studentRepo.DeleteStudentAsync(studentModelFromRepo);
-            _studentRepo.SaveChanges();
+            await _studentRepo.DeleteStudentAsync( await studentModelFromRepo);
+            await _studentRepo.SaveChangesAsync();
 
             return Ok();
         }
