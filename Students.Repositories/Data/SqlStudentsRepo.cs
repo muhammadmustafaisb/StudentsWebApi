@@ -27,7 +27,7 @@ namespace Students.Repositories.Data
                 throw new ArgumentNullException(nameof(std));
             }
             _studentContext.Students.Remove(std);
-            await _studentContext.SaveChangesAsync();
+            
         }
 
         public IEnumerable<Student> GetAllStudents()
