@@ -4,11 +4,13 @@ using Students.Repositories.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Students.Repositories.Data;
 using Students.Repositories.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Students.Controllers
 {
     [Route("api/Students")]
     [ApiController]
+    [Authorize]
     public class StudentsController : ControllerBase
     {
         private readonly IStudentsRepo _studentRepo;
@@ -72,7 +74,7 @@ namespace Students.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult> PartialStudentUpdate(int id, JsonPatchDocument<StudentUpdateDto> patchDoc)
         {
-            var studentModelFromRepo =await _studentRepo.GetStudentByIdAsync(id);
+            var studentModelFromRepo = await _studentRepo.GetStudentByIdAsync(id);
 
             if (studentModelFromRepo == null)
             {

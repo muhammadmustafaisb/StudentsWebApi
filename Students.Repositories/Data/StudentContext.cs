@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Students.Repositories.Models;
 
 namespace Students.Repositories.Data
 {
-    public class StudentContext : DbContext
+    public class StudentContext : IdentityDbContext<StudentUser>
     {
         public StudentContext(DbContextOptions<StudentContext> options) : base(options)
         {
